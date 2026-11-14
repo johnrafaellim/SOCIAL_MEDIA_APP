@@ -13,6 +13,7 @@ import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
+import { InputError } from "../../components/input-error";
 
 const PostsCreate = () => {
     return (
@@ -36,11 +37,7 @@ const PostsCreate = () => {
                                         name="title"
                                         type="text"
                                     />
-                                    {errors.title && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors.title}
-                                        </p>
-                                    )}
+                                    <InputError message={errors.title} />
                                 </div>
                                 <div className="space-y-1">
                                     <Label htmlFor="body">Body</Label>
@@ -49,11 +46,7 @@ const PostsCreate = () => {
                                         aria-invalid={!!errors.title}
                                         name="body"
                                     />
-                                    {errors.body && (
-                                        <p className="text-red-500 text-sm">
-                                            {errors.body}
-                                        </p>
-                                    )}
+                                    <InputError message={errors.body} />
                                 </div>
                                 <Button type="submit">Create</Button>
                             </>
