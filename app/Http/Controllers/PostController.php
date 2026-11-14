@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -13,14 +14,14 @@ class PostController extends Controller
     public function index(): Response
     {
         return Inertia::render('posts/index', [
-            'posts' => Post::latest()->get()
+            'posts' => Post::with('user')->latest()->get()
         ]);
     }
 
     public function show(string $id): Response
     {
         return Inertia::render('posts/show', [
-            'post' => Post::findOrFail($id)
+            'post' => Post::with('user')->findOrFail($id)
         ]);
     }
 
@@ -32,11 +33,14 @@ class PostController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string|max:255',
+            'title' => 'required|string|min:3|max:255',
+            'body' => 'required|string|min:10|max:255',
         ]);
 
-        Post::create($validated);
+        Post::create([
+            ...$validated,
+            'user_id' => User::inRandomOrder()->first()->id
+        ]);
 
         return redirect('/posts');
     }
