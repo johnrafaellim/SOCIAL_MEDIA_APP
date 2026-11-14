@@ -2,74 +2,65 @@ import React from "react";
 import AppLayout from "../../layouts/app-layout";
 import { Form } from "@inertiajs/react";
 import { cn } from "../../lib/utils";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "../../components/ui/card";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
+import { Input } from "../../components/ui/input";
+import { Textarea } from "../../components/ui/textarea";
 
 const PostsCreate = () => {
     return (
         <AppLayout>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                Create Post
-            </h1>
-            <Form action="/posts" method="post" className="space-y-4">
-                {({ errors }) => (
-                    <>
-                        <div>
-                            <label
-                                htmlFor="title"
-                                className={cn(
-                                    "block mb-1",
-                                    errors.title && "text-red-500",
-                                )}
-                            >
-                                Title
-                            </label>
-                            <input
-                                id="title"
-                                className={cn(
-                                    "w-full border rounded px-3 py-2",
-                                    errors.title && "border-red-500",
-                                )}
-                                name="title"
-                                type="text"
-                            />
-                            {errors.title && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.title}
-                                </p>
-                            )}
-                        </div>
-                        <div>
-                            <label
-                                htmlFor="body"
-                                className={cn(
-                                    "block mb-1",
-                                    errors.body && "text-red-500",
-                                )}
-                            >
-                                Body
-                            </label>
-                            <textarea
-                                id="body"
-                                className={cn(
-                                    "w-full border rounded px-3 py-2",
-                                    errors.body && "border-red-500",
-                                )}
-                                name="body"
-                            />
-                            {errors.body && (
-                                <p className="text-red-500 text-sm mt-1">
-                                    {errors.body}
-                                </p>
-                            )}
-                        </div>
-                        <button
-                            type="submit"
-                            className="bg-blue-600 text-white px-4 py-2 rounded"
-                        >
-                            Create
-                        </button>
-                    </>
-                )}
-            </Form>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Create Post</CardTitle>
+                    <CardDescription>Create a new post</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Form action="/posts" method="post" className="space-y-4">
+                        {({ errors }) => (
+                            <>
+                                <div className="space-y-1">
+                                    <Label htmlFor="title" className="mb-1">
+                                        Title
+                                    </Label>
+                                    <Input
+                                        id="title"
+                                        aria-invalid={!!errors.title}
+                                        name="title"
+                                        type="text"
+                                    />
+                                    {errors.title && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.title}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="space-y-1">
+                                    <Label htmlFor="body">Body</Label>
+                                    <Textarea
+                                        id="body"
+                                        aria-invalid={!!errors.title}
+                                        name="body"
+                                    />
+                                    {errors.body && (
+                                        <p className="text-red-500 text-sm">
+                                            {errors.body}
+                                        </p>
+                                    )}
+                                </div>
+                                <Button type="submit">Create</Button>
+                            </>
+                        )}
+                    </Form>
+                </CardContent>
+            </Card>
         </AppLayout>
     );
 };
