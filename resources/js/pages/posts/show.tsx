@@ -1,6 +1,14 @@
 import React from "react";
 import AppLayout from "../../layouts/app-layout";
-import { Post } from "resources/js/types";
+import { Post } from "../../types/index";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
+} from "../../components/ui/card";
+import CommentForm from "../..//components/comment-form";
 
 interface PostsShowProps {
     post: Post;
@@ -9,9 +17,28 @@ interface PostsShowProps {
 const PostsShow = ({ post }: PostsShowProps) => {
     return (
         <AppLayout>
-            <h1 className="text-xl font-semibold mb-2">{post.title}</h1>
-            <p className="text-sm text-gray-500 mb-2">By {post.user.name}</p>
-            <div className="text-gray-600">{post.body}</div>
+            <div className="space-y-6">
+                {/* Post Content */}
+                <Card className="rounded-none">
+                    <CardHeader>
+                        <CardTitle className="text-2xl">{post.title}</CardTitle>
+                        <CardDescription>
+                            By {post?.user?.name} on{" "}
+                            {new Date(post.created_at).toLocaleDateString()}
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-gray-700 whitespace-pre-wrap">
+                            {post.body}
+                        </p>
+                    </CardContent>
+                </Card>
+
+                {/* Comment Form */}
+                <CommentForm postId={post.id} />
+
+                {/* Comments Section */}
+            </div>
         </AppLayout>
     );
 };
