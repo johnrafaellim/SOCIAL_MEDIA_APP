@@ -6,9 +6,22 @@ use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class CommentController extends Controller
+class CommentController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            // Only rate-limit the 'store' method (e.g., creating comments)
+            new Middleware('throttle:10,1', only: ['store']),
+
+            // Or apply to multiple specific methods:
+            // new Middleware('throttle:10,1', only: ['store', 'update']),
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */

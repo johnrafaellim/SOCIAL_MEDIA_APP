@@ -33,6 +33,9 @@ const CommentForm = ({ postId, onCommentAdded }: CommentFormProps) => {
                     className="space-y-4"
                     resetOnSuccess
                     onSuccess={() => onCommentAdded?.()}
+                    options={{
+                        only: ["comments"],
+                    }}
                 >
                     {({ errors, processing }) => (
                         <>
