@@ -10,6 +10,7 @@ import { Form } from "@inertiajs/react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { InputError } from "./input-error";
 
 interface CommentFormProps {
     postId: number;
@@ -32,7 +33,7 @@ const CommentForm = ({ postId }: CommentFormProps) => {
                                 type="hidden"
                                 name="post_id"
                                 value={postId}
-                            ></Input>
+                            />
                             <div className="space-y-1">
                                 <Textarea
                                     id="body"
@@ -40,8 +41,9 @@ const CommentForm = ({ postId }: CommentFormProps) => {
                                     placeholder="Write your comment here..."
                                     aria-invalid={!!errors.body}
                                 />
+                                <InputError message={errors.body} />
                             </div>
-                            <Button>Add Comment</Button>
+                            <Button type="submit">Add Comment</Button>
                         </>
                     )}
                 </Form>

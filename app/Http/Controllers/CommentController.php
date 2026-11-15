@@ -34,7 +34,7 @@ class CommentController extends Controller
 
         Comment::create([
             ...$validated,
-            'user_id' => User::inRandomOrdder()->first()->id
+            'user_id' => User::inRandomOrder()->first()->id
         ]);
 
         return redirect()->back();

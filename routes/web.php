@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -19,3 +20,5 @@ Route::controller(PostController::class)->group(function () {
     Route::post('/posts', 'store');
     Route::get('/posts/{id}', 'show');
 });
+
+Route::resource('comments', CommentController::class);
