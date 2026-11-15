@@ -14,9 +14,10 @@ import { InputError } from "./input-error";
 
 interface CommentFormProps {
     postId: number;
+    onCommentAdded?: () => void;
 }
 
-const CommentForm = ({ postId }: CommentFormProps) => {
+const CommentForm = ({ postId, onCommentAdded }: CommentFormProps) => {
     return (
         <Card className="rounded-none">
             <CardHeader>
@@ -31,6 +32,7 @@ const CommentForm = ({ postId }: CommentFormProps) => {
                     method="post"
                     className="space-y-4"
                     resetOnSuccess
+                    onSuccess={() => onCommentAdded?.()}
                 >
                     {({ errors, processing }) => (
                         <>
