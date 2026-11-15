@@ -11,6 +11,7 @@ import {
 import CommentForm from "../../components/comment-form";
 import CommentCard from "../..//components/comment-card";
 import { Deferred } from "@inertiajs/react";
+import { toast } from "sonner";
 
 interface PostsShowProps {
     post: Post;
@@ -20,13 +21,19 @@ interface PostsShowProps {
 const PostsShow = ({ post, comments }: PostsShowProps) => {
     const commentsSectionRef = useRef<HTMLDivElement>(null);
 
-    const handleCommentAdded = () =>
+    const handleCommentAdded = () => {
+        toast("Comment has been added", {
+            description: "Your comment is already live and visible",
+            position: "bottom-right",
+        });
+
         setTimeout(() => {
             commentsSectionRef.current?.scrollIntoView({
                 behavior: "smooth",
                 block: "start",
             });
         }, 100);
+    };
 
     return (
         <AppLayout>
