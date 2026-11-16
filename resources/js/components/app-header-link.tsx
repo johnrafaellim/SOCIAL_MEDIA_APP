@@ -1,8 +1,8 @@
 import { Link } from "@inertiajs/react";
-import React, { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 interface AppHeaderLinkProps {
-    href: string;
+    href: ComponentProps<typeof Link>["href"];
     children: ReactNode;
 }
 

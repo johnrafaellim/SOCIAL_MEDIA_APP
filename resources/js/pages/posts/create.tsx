@@ -1,7 +1,6 @@
 import React from "react";
 import AppLayout from "../../layouts/app-layout";
 import { Form } from "@inertiajs/react";
-import { cn } from "../../lib/utils";
 import {
     Card,
     CardContent,
@@ -14,6 +13,7 @@ import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 import { Textarea } from "../../components/ui/textarea";
 import { InputError } from "../../components/input-error";
+import { store } from "@/actions/App/Http/Controllers/PostController";
 
 const PostsCreate = () => {
     return (
@@ -24,7 +24,12 @@ const PostsCreate = () => {
                     <CardDescription>Create a new post</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <Form action="/posts" method="post" className="space-y-4">
+                    <Form
+                        action={store()}
+                        // action="/posts"
+                        // method="post"
+                        className="space-y-4"
+                    >
                         {({ errors }) => (
                             <>
                                 <div className="space-y-1">

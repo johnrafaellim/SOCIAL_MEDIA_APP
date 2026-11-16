@@ -24,3 +24,7 @@ Homestead.yaml
 Thumbs.db
 package-lock.json
 composer.lock
+
+resources/js/actions
+resources/js/routes
+resources/js/wayfinder

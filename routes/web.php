@@ -7,11 +7,11 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     return Inertia::render('home');
-});
+})->name('home.index');
 
 Route::get('/about', function () {
     return Inertia::render('about');
-});
+})->name('about.index');
 
 
 Route::controller(PostController::class)->group(function () {

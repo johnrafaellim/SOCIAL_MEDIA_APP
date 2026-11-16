@@ -9,6 +9,7 @@ import {
     CardHeader,
     CardTitle,
 } from "../../components/ui/card";
+import { show } from "@/actions/App/Http/Controllers/PostController";
 
 interface PostsIndexProps {
     posts: Post[];
@@ -32,12 +33,13 @@ const PostsIndex = ({ posts }: PostsIndexProps) => {
                             >
                                 <CardHeader>
                                     <CardTitle>
-                                        <Link href={`/posts/${post.id}`}>
+                                        <Link href={show(post.id)}>
+                                            {/* <Link href={`/posts/${post.id}`}> */}
                                             {post.title}
                                         </Link>
                                     </CardTitle>
                                     <CardDescription>
-                                        By {post.user.name}
+                                        By {post?.user?.name}
                                     </CardDescription>
                                 </CardHeader>
                                 <CardContent>
