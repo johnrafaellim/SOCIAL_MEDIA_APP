@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import AppLayout from "../../layouts/app-layout";
 import { Post, Comment } from "../../types/index";
 import {
@@ -9,9 +9,10 @@ import {
     CardTitle,
 } from "../../components/ui/card";
 import CommentForm from "../../components/comment-form";
-import CommentCard from "../..//components/comment-card";
-import { Deferred } from "@inertiajs/react";
+import CommentCard from "../../components/comment-card";
+import { Deferred, usePoll } from "@inertiajs/react";
 import { toast } from "sonner";
+import CommentList from "../../components/comment-list";
 
 interface PostsShowProps {
     post: Post;
@@ -20,19 +21,47 @@ interface PostsShowProps {
 
 const PostsShow = ({ post, comments }: PostsShowProps) => {
     const commentsSectionRef = useRef<HTMLDivElement>(null);
+    const commentCountRef = useRef(comments?.length ?? 0);
+    const isWritingComment = useRef(false);
 
-    const handleCommentAdded = () => {
-        toast("Comment has been added", {
-            description: "Your comment is already live and visible",
-            position: "bottom-right",
+    const scrollToComments = () =>
+        commentsSectionRef.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "start",
         });
 
-        setTimeout(() => {
-            commentsSectionRef.current?.scrollIntoView({
-                behavior: "smooth",
-                block: "start",
+    usePoll(3_000, {
+        only: ["comments"],
+    });
+
+    useEffect(() => {
+        // Current length of comments = []
+        const newCommentCount = comments?.length ?? 0;
+        // We have stored the previous length
+        // We compare them and show toast if different
+        if (
+            newCommentCount > commentCountRef.current &&
+            commentCountRef.current > 0 &&
+            !isWritingComment.current
+        ) {
+            toast("New comments available", {
+                duration: 6_000,
+                action: {
+                    label: "View Comments",
+                    onClick: scrollToComments,
+                },
             });
-        }, 100);
+        }
+        // And we update the previous length = current length
+        commentCountRef.current = newCommentCount;
+        isWritingComment.current = false;
+    }, [comments]);
+
+    const handleCommentAdded = () => {
+        isWritingComment.current = true;
+        toast("Comment has been added", {
+            description: "Your comment is already live and visible",
+        });
     };
 
     return (
@@ -64,32 +93,9 @@ const PostsShow = ({ post, comments }: PostsShowProps) => {
                 <div ref={commentsSectionRef}>
                     <Deferred
                         data="comments"
-                        fallback={
-                            <div className="text-center py-8">
-                                <p className="text-gray-500">
-                                    Loading comments...
-                                </p>
-                            </div>
-                        }
+                        fallback={<CommentList comments={comments ?? []} />}
                     >
-                        <div className="space-y-4">
-                            {comments && comments.length > 0 ? (
-                                <div>
-                                    {comments.map((comment) => (
-                                        <CommentCard
-                                            key={comment.id}
-                                            comment={comment}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="text-center py-8">
-                                    <p className="text-gray-500">
-                                        No comments yet.
-                                    </p>
-                                </div>
-                            )}
-                        </div>
+                        <CommentList comments={comments ?? []} />
                     </Deferred>
                 </div>
             </div>
