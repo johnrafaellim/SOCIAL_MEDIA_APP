@@ -7,6 +7,7 @@ export interface Post {
     user_id: number;
     user?: User;
     comments?: Comment[];
+    likes?: Like[];
 }
 
 export interface User {
@@ -26,6 +27,15 @@ export interface Comment {
     user_id: number;
     post?: Post;
     user?: User;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Like {
+    id: number;
+    post_id: number;
+    ip_address: string;
+    user_agent: string;
     created_at: string;
     updated_at: string;
 }
