@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import AppLayout from "../../layouts/app-layout";
-import { Post, Comment } from "../../types/index";
+import { Post, Comment, PostLikesData } from "../../types/index";
 import {
     Card,
     CardContent,
@@ -13,13 +13,15 @@ import CommentCard from "../../components/comment-card";
 import { Deferred, usePoll } from "@inertiajs/react";
 import { toast } from "sonner";
 import CommentList from "../../components/comment-list";
+import LikeButton from "../../components/like-button";
 
 interface PostsShowProps {
     post: Post;
     comments: Comment[];
+    likes: PostLikesData;
 }
 
-const PostsShow = ({ post, comments }: PostsShowProps) => {
+const PostsShow = ({ post, comments, likes }: PostsShowProps) => {
     const commentsSectionRef = useRef<HTMLDivElement>(null);
     const commentCountRef = useRef(comments?.length ?? 0);
     const isWritingComment = useRef(false);
@@ -31,7 +33,7 @@ const PostsShow = ({ post, comments }: PostsShowProps) => {
         });
 
     usePoll(3_000, {
-        only: ["comments"],
+        only: ["comments", "likes"],
     });
 
     useEffect(() => {
@@ -70,16 +72,35 @@ const PostsShow = ({ post, comments }: PostsShowProps) => {
                 {/* Post Content */}
                 <Card className="rounded-none">
                     <CardHeader>
-                        <CardTitle className="text-2xl">{post.title}</CardTitle>
+                        <CardTitle className="text-2xl">
+                            {post.title} {post.id}
+                        </CardTitle>
                         <CardDescription>
                             By {post?.user?.name} on{" "}
                             {new Date(post.created_at).toLocaleDateString()}
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="space-y-4">
                         <p className="text-gray-700 whitespace-pre-wrap">
                             {post.body}
                         </p>
+                        <Deferred
+                            data="likes"
+                            fallback={
+                                <LikeButton
+                                    postId={post.id}
+                                    count={likes?.count}
+                                    liked={likes?.user_has_liked}
+                                    isLoading={!likes}
+                                />
+                            }
+                        >
+                            <LikeButton
+                                postId={post.id}
+                                count={likes?.count}
+                                liked={likes?.user_has_liked}
+                            />
+                        </Deferred>
                     </CardContent>
                 </Card>
 

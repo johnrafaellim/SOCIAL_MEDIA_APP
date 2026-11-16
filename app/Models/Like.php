@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Like extends Model
 {
-    protected $fillable = ['post_id', 'ip_address', 'user_agent'];
+    protected $fillable = ['user_id', 'post_id', 'ip_address', 'user_agent'];
 
     public function post(): BelongsTo
     {
