@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostToggleLike;
@@ -13,6 +15,13 @@ Route::get('/', function () {
 Route::get('/about', function () {
     return Inertia::render('about');
 })->name('about.index');
+
+Route::get('/auth/register', [RegisterController::class, 'create']);
+Route::post('/auth/register', [RegisterController::class, 'store']);
+
+Route::get('/auth/login', [LoginController::class, 'create'])->name('login');
+Route::post('/auth/login', [LoginController::class, 'store']);
+Route::delete('/auth/logout', [LoginController::class, 'destroy']);
 
 Route::post('/posts/{post}/likes/toggle', PostToggleLike::class);
 

@@ -47,7 +47,7 @@ class CommentController extends Controller implements HasMiddleware
 
         Comment::create([
             ...$validated,
-            'user_id' => User::inRandomOrder()->first()->id
+            'user_id' => $request->user()
         ]);
 
         return redirect()->back();

@@ -1,34 +1,52 @@
-import React from "react";
-import AppHeaderLogo from "./app-header-logo";
+import { Link, usePage } from "@inertiajs/react";
 import AppHeaderLink from "./app-header-link";
-import { Link } from "@inertiajs/react";
+import AppHeaderLogo from "./app-header-logo";
 import { Button } from "./ui/button";
-import { index, create } from "@/actions/App/Http/Controllers/PostController";
-import home from "../routes/home";
-import about from "../routes/about";
+import { create, index } from "@/actions/App/Http/Controllers/PostController";
+import home from "@/routes/home";
+import about from "@/routes/about";
+import { PageProps } from "@/types";
+import { create as loginPage } from "@/actions/App/Http/Controllers/Auth/LoginController";
+import UserDropdown from "./user-dropdown";
+import { buttonVariants } from "@/components/ui/button";
 
-const Appheader = () => {
+export default function AppHeader() {
+    const { auth } = usePage<PageProps>().props;
+
     return (
         <header>
             <div className="max-w-4xl mx-auto px-4 py-4">
                 <nav className="flex items-center justify-between">
                     <AppHeaderLogo />
-                    <div className="flex items-center space-x-6">
-                        <Button className="p-4">
-                            <Link href={create()}>Add Post</Link>
-                            {/* <Link href="posts/create">Add Post</Link> */}
-                        </Button>
-                        <AppHeaderLink href={home.index()}>Home</AppHeaderLink>
-                        <AppHeaderLink href={about.index()}>
+                    <div className="flex space-x-6 items-center">
+                        {auth?.can?.post?.create && (
+                            <Button>
+                                <Link href={create()}>Add Post</Link>
+                            </Button>
+                        )}
+                        <AppHeaderLink href={home.index().url}>
+                            Home
+                        </AppHeaderLink>
+                        <AppHeaderLink href={about.index().url}>
                             About
                         </AppHeaderLink>
-                        <AppHeaderLink href={index()}>Posts</AppHeaderLink>
-                        {/* <AppHeaderLink href="/posts">Posts</AppHeaderLink> */}
+                        <AppHeaderLink href={index().url}>Posts</AppHeaderLink>
+
+                        <div>
+                            {auth.user ? (
+                                <UserDropdown />
+                            ) : (
+                                <Link
+                                    href={loginPage().url}
+                                    className={buttonVariants()}
+                                >
+                                    Sign In
+                                </Link>
+                            )}
+                        </div>
                     </div>
                 </nav>
             </div>
         </header>
     );
-};
-
-export default Appheader;
+}
