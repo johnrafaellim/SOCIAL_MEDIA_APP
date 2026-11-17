@@ -6,6 +6,7 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -33,12 +34,10 @@ class PostController extends Controller
             'likes' => Inertia::defer(
                 fn() => [
                     'count' => $post->likes()->count(),
-                    'user_has_liked' => $post->likes()->where([
-                        'ip_address' => request()->ip(),
-                        'user_agent' => request()->userAgent()
-                    ])->exists()
+                    'user_has_liked' => Auth::check() ?
+                        $post->likes()->where('user_id', Auth::id())->exists() : false,
                 ]
-            )
+            ),
         ]);
     }
 

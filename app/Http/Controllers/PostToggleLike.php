@@ -9,38 +9,19 @@ class PostToggleLike extends Controller
 {
     public function __invoke(Request $request, Post $post)
     {
-        $ip = $request->ip();
-        $userAgent = $request->userAgent();
+        $userId = $request->user()->id;
 
-        $existingLike = $post->likes()->where([
-            'ip_address' => $ip,
-            'user_agent' => $userAgent
-        ])->first();
+        $like = $post->likes()
+            ->where('user_id', $userId);
 
-        if ($existingLike) {
-            $existingLike->delete();
+        if ($like->exists()) {
+            $like->delete();
         } else {
             $post->likes()->create([
-                'ip_address' => $ip,
-                'user_agent' => $userAgent
+                'user_id' => $userId,
             ]);
         }
 
         return back();
-
-        // $userId = $request->user()->id;
-
-        // $like = $post->likes()
-        //     ->where('user_id', $userId);
-
-        // if ($like->exists()) {
-        //     $like->delete();
-        // } else {
-        //     $post->likes()->create([
-        //         'user_id' => $userId,
-        //     ]);
-        // }
-
-        // return back();
     }
 }
