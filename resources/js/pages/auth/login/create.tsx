@@ -35,6 +35,7 @@ export default function Login() {
                                         required
                                         autoFocus
                                         aria-invalid={!!errors.email}
+                                        autoComplete="username"
                                     />
                                     <InputError message={errors.email} />
                                 </div>
@@ -47,6 +48,7 @@ export default function Login() {
                                         type="password"
                                         required
                                         aria-invalid={!!errors.password}
+                                        autoComplete="current-password"
                                     />
                                     <InputError message={errors.password} />
                                 </div>

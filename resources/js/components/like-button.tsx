@@ -1,9 +1,10 @@
 import { Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { router } from "@inertiajs/react";
+import { useEffect, useState } from "react";
+import { router, usePage } from "@inertiajs/react";
 import PostToggleLike from "@/actions/App/Http/Controllers/PostToggleLike";
 import { toast } from "sonner";
+import { PageProps } from "@/types";
 
 interface LikeButtonProps {
     postId: number;
@@ -18,6 +19,8 @@ export default function LikeButton({
     liked = false,
     isLoading: externalLoading = false,
 }: LikeButtonProps) {
+    const { auth } = usePage<PageProps>().props;
+
     const [isLoading, setIsLoading] = useState(false);
     const disabled = isLoading || externalLoading;
 
@@ -30,7 +33,9 @@ export default function LikeButton({
             {},
             {
                 onStart: () => setIsLoading(true),
-                onSuccess: () => toast(liked ? "Post unliked!" : "Post liked!"),
+                onSuccess: () =>
+                    auth?.user &&
+                    toast(liked ? "Post unliked!" : "Post liked!"),
                 onError: () => toast("Failed to update like"),
                 onFinish: () => setIsLoading(false),
                 only: ["likes"],
