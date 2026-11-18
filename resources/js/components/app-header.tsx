@@ -12,14 +12,14 @@ import { buttonVariants } from "@/components/ui/button";
 
 export default function AppHeader() {
     const { auth } = usePage<PageProps>().props;
-
+    console.log("auth", auth);
     return (
         <header>
             <div className="max-w-4xl mx-auto px-4 py-4">
                 <nav className="flex items-center justify-between">
                     <AppHeaderLogo />
                     <div className="flex space-x-6 items-center">
-                        {auth?.can?.post?.create && (
+                        {auth?.user && (
                             <Button>
                                 <Link href={create()}>Add Post</Link>
                             </Button>

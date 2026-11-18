@@ -7,15 +7,22 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\PostToggleLike;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 
+// Request -> Laravel -> http://localhost:8000 -> [Middleware 1] -> Route -> Response
+
+// http://localhost:8000
+
+// http://localhost:8000 + /
 Route::get('/', function () {
     return Inertia::render('home');
 })->name('home.index');
 
+// http://localhost:8000/about
 Route::get('/about', function () {
     return Inertia::render('about');
 })->name('about.index');
+
+// http://localhost:8000/1
 
 Route::get('/auth/register', [RegisterController::class, 'create']);
 Route::post('/auth/register', [RegisterController::class, 'store']);
@@ -26,11 +33,19 @@ Route::delete('/auth/logout', [LoginController::class, 'destroy']);
 
 Route::post('/posts/{post}/likes/toggle', PostToggleLike::class)->middleware('auth');
 
-Route::controller(PostController::class)->group(function () {
-    Route::get('/posts', 'index');
-    Route::get('/posts/create', 'create');
-    Route::post('/posts', 'store');
-    Route::get('/posts/{id}', 'show');
-});
+Route::get('/posts/create', [PostController::class, 'create'])->middleware('auth');
+Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{id}', [PostController::class, 'show'])->name('posts.show');
+Route::post('/posts', [PostController::class, 'store'])->middleware('auth');
 
-Route::resource('comments', CommentController::class);
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])
+    ->middleware('auth')
+    ->name('posts.edit');
+Route::put('/posts/{post}', [PostController::class, 'update'])
+    ->middleware('auth')
+    ->name('posts.update');
+Route::delete('/posts/{post}', [PostController::class, 'destroy'])
+    ->middleware('auth')
+    ->name('posts.destroy');
+
+Route::post('/comments', [CommentController::class, 'store'])->middleware('auth');

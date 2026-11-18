@@ -18,8 +18,9 @@ class PostFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->sentence(3),
-            'body' => fake()->paragraph(3)
+            'title' => fake()->sentence(),
+            'body' => fake()->paragraph(3),
+            'created_at' => fake()->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

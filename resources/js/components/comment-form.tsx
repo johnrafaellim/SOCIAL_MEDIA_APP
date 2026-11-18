@@ -1,16 +1,15 @@
-import React from "react";
+import { InputError } from "@/components/input-error";
+import { Button } from "@/components/ui/button";
 import {
     Card,
     CardContent,
     CardDescription,
     CardHeader,
     CardTitle,
-} from "./ui/card";
+} from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
 import { Form } from "@inertiajs/react";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
-import { InputError } from "./input-error";
 import { store } from "@/actions/App/Http/Controllers/CommentController";
 
 interface CommentFormProps {
@@ -18,7 +17,10 @@ interface CommentFormProps {
     onCommentAdded?: () => void;
 }
 
-const CommentForm = ({ postId, onCommentAdded }: CommentFormProps) => {
+export default function CommentForm({
+    postId,
+    onCommentAdded,
+}: CommentFormProps) {
     return (
         <Card className="rounded-none">
             <CardHeader>
@@ -30,13 +32,10 @@ const CommentForm = ({ postId, onCommentAdded }: CommentFormProps) => {
             <CardContent>
                 <Form
                     action={store()}
-                    // action="/comments"
-                    // method="post"
                     className="space-y-4"
                     resetOnSuccess
-                    onStart={() => onCommentAdded?.()}
-                    options={{
-                        only: ["comments"],
+                    onSuccess={() => {
+                        onCommentAdded?.();
                     }}
                 >
                     {({ errors, processing }) => (
@@ -66,6 +65,4 @@ const CommentForm = ({ postId, onCommentAdded }: CommentFormProps) => {
             </CardContent>
         </Card>
     );
-};
-
-export default CommentForm;
+}

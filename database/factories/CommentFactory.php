@@ -18,7 +18,8 @@ class CommentFactory extends Factory
     public function definition(): array
     {
         return [
-            'body' => fake()->paragraph(10)
+            'body' => fake()->paragraph(10),
+            'created_at' => fake()->dateTimeBetween('-1 year', 'now'),
         ];
     }
 }

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             ->create();
         $posts = Post::all();
 
-        Comment::factory(100)->create([
+        Comment::factory(500)->create([
             'user_id' => fn() => $users->random()->id,
             'post_id' => fn() => $posts->random()->id,
         ]);
