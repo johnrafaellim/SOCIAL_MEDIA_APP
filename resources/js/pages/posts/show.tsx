@@ -46,7 +46,11 @@ export default function PostsShow({
     // useRef   - internal logic
     const commentCountRef = useRef(comments_count ?? 0);
     const iAmWritingComment = useRef(false);
-    const { url } = usePage();
+    const { url, props } = usePage();
+
+    const auth = props.auth as {
+        user: { id: number } | null;
+    };
 
     const scrollToComments = () =>
         commentsSectionRef.current?.scrollIntoView({
@@ -156,6 +160,7 @@ export default function PostsShow({
                 <CommentForm
                     postId={post.id}
                     onCommentAdded={handleCommentAdded}
+                    isAuthenticated={!!auth.user}
                 />
 
                 {/* Comments Section */}

@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Post;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -38,10 +40,15 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            // Lazily...
-            'auth.user' => fn() => $request->user()
-                ? (new UserResource($request->user()))->resolve()
-                : null,
+            'auth' => [
+                'user' => $request->user()
+                    ? (new UserResource($request->user()))->resolve($request)
+                    : null,
+            ],
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+            ],
         ];
     }
 }

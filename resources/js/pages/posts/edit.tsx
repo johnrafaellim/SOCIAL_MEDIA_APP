@@ -52,7 +52,7 @@ export default function PostsEdit({ post }: PostsEditProps) {
                                     />
                                     <InputError message={errors.body} />
                                 </div>
-                                <Button>Update</Button>
+                                <Button type="submit">Update</Button>
                             </>
                         )}
                     </Form>

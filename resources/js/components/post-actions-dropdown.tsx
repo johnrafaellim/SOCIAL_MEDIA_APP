@@ -1,13 +1,15 @@
+import { useState } from "react";
 import { MoreVertical, Pencil, Trash2 } from "lucide-react";
-import { Button } from "./ui/button";
+import { Link, router } from "@inertiajs/react";
+import { destroy, edit } from "@/actions/App/Http/Controllers/PostController";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { Link, router } from "@inertiajs/react";
-import { destroy, edit } from "@/actions/App/Http/Controllers/PostController";
+
 import {
     AlertDialog,
     AlertDialogAction,
@@ -17,9 +19,7 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle,
-    AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { toast } from "sonner";
 
 interface PostActionsDropdownProps {
     postId: number;
@@ -32,8 +32,14 @@ export default function PostActionsDropdown({
     canDelete,
     canUpdate,
 }: PostActionsDropdownProps) {
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
     const handleDelete = () => {
-        router.delete(destroy(postId));
+        router.delete(destroy(postId), {
+            onSuccess: () => {
+                setIsDeleteDialogOpen(false);
+            },
+        });
     };
 
     if (!canUpdate && !canDelete) {
@@ -41,52 +47,63 @@ export default function PostActionsDropdown({
     }
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm">
-                    <MoreVertical className="h-4 w-4" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                {canUpdate && (
-                    <DropdownMenuItem asChild>
-                        <Link href={edit(postId)}>
-                            <Pencil />
+        <>
+            <DropdownMenu>
+                <DropdownMenuTrigger className="cursor-pointer hover:bg-gray-100 flex items-center justify-center px-1.5 py-1 rounded">
+                    <MoreVertical size={15} />
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent align="end">
+                    {canUpdate && (
+                        <DropdownMenuItem
+                            render={<Link href={edit(postId)} />}
+                            className="flex gap-1 items-center"
+                        >
+                            <Pencil size={16} />
                             Edit Post
-                        </Link>
-                    </DropdownMenuItem>
-                )}
-                {canDelete && (
-                    <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                            <DropdownMenuItem
-                                onSelect={(e) => e.preventDefault()}
-                            >
-                                <Trash2 />
-                                Delete Post
-                            </DropdownMenuItem>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                            <AlertDialogHeader>
-                                <AlertDialogTitle>
-                                    Are you sure?
-                                </AlertDialogTitle>
-                                <AlertDialogDescription>
-                                    This action cannot be undone. This will
-                                    permantly delete your post and remove all
-                                    associated comments and likes.
-                                </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                                <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                <AlertDialogAction onClick={handleDelete}>
-                                    Delete
-                                </AlertDialogAction>
-                            </AlertDialogFooter>
-                        </AlertDialogContent>
-                    </AlertDialog>
-                )}
-            </DropdownMenuContent>
-        </DropdownMenu>
+                        </DropdownMenuItem>
+                    )}
+
+                    {canDelete && (
+                        <DropdownMenuItem
+                            onClick={() => setIsDeleteDialogOpen(true)}
+                            className="cursor-pointer text-red-600"
+                        >
+                            <Trash2 size={16} />
+                            Delete Post
+                        </DropdownMenuItem>
+                    )}
+                </DropdownMenuContent>
+            </DropdownMenu>
+
+            {/* Delete Confirmation Dialog */}
+            <AlertDialog
+                open={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+            >
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+
+                        <AlertDialogDescription>
+                            This action cannot be undone. This will permanently
+                            delete your post and remove all associated comments
+                            and likes.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                        <AlertDialogAction
+                            onClick={handleDelete}
+                            className="bg-red-600 hover:bg-red-700"
+                        >
+                            Delete
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+        </>
     );
 }

@@ -30,6 +30,7 @@ export default function UserDropdown() {
                 <div className="w-8 h-8 rounded-md bg-gray-200 flex items-center justify-center text-gray-600 text-sm font-bold shrink-0">
                     {auth.user.name.charAt(0).toUpperCase()}
                 </div>
+
                 <div className="flex flex-col items-start">
                     <p className="text-sm font-medium leading-none">
                         {auth.user.name}
@@ -38,18 +39,23 @@ export default function UserDropdown() {
                         {auth.user.email}
                     </p>
                 </div>
+
                 <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </DropdownMenuTrigger>
+
             <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuItem>
                     <User />
                     Profile
                 </DropdownMenuItem>
+
                 <DropdownMenuItem>
                     <SettingsIcon />
                     Settings
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer"

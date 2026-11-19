@@ -33,8 +33,8 @@ class PostController extends Controller
         return Inertia::render('posts/show', [
             'post' => $post,
             'can' => [
-                // 'update' => Auth::check() && Auth::user()->can('update', $post),
-                // 'delete' => Auth::check() && Auth::user()->can('delete', $post),
+                'update' => Gate::allows('update', $post),
+                'delete' => Gate::allows('delete', $post),
             ],
             'comments' => Inertia::scroll(
                 fn() => $post->comments()
@@ -55,7 +55,7 @@ class PostController extends Controller
 
     public function create(): Response
     {
-        Gate::authorize('create', Post::class);
+        // Gate::authorize('create', Post::class);
 
         return Inertia::render('posts/create');
     }

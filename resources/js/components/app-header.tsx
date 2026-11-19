@@ -9,10 +9,11 @@ import { PageProps } from "@/types";
 import { create as loginPage } from "@/actions/App/Http/Controllers/Auth/LoginController";
 import UserDropdown from "./user-dropdown";
 import { buttonVariants } from "@/components/ui/button";
+import { useEffect } from "react";
 
 export default function AppHeader() {
     const { auth } = usePage<PageProps>().props;
-    console.log("auth", auth);
+
     return (
         <header>
             <div className="max-w-4xl mx-auto px-4 py-4">
